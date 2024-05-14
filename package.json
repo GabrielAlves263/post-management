@@ -1,0 +1,11 @@
+{
+  "name": "post-management",
+  "version": "1.0.0",
+  "description": "API REST para gerenciamento de",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Gabriel Alves",
+  "license": "ISC"
+}
