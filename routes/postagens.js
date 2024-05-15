@@ -1,4 +1,4 @@
-const express = require('express')
+import express from "express";
 const router = express.Router()
 
 // Listar todas as postagens.
@@ -10,8 +10,15 @@ router.get('/', (req, res, next) => {
 
 // Criar uma nova postagem.
 router.post('/', (req, res, next) => {
+
+    const postagem = {
+        titulo: req.body.titulo,
+        descricao: req.body.descricao
+    }
+
     res.status(201).send({
-        mensagem: 'POST'
+        mensagem: 'POST',
+        postagem: postagem
     })
 })
 
@@ -38,4 +45,4 @@ router.delete('/', (req, res, next) => {
     })
 })
 
-module.exports = router
+export const rotaPostagens = router
