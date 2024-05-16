@@ -1,7 +1,7 @@
 import bodyParser from "body-parser";
 import express from "express";
 import morgan from "morgan";
-import { rotaPostagens } from '../routes/postagens.js';
+import router from '../routes/routes.js';
 
 export const App = express()
 
@@ -25,7 +25,7 @@ App.use((req, res, next) => {
 })
 
 // App.use(express.json())
-App.use('/postagens', rotaPostagens)
+App.use(router)
 
 // Rota não encontrada
 App.use((req, res, next) => {
