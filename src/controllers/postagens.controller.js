@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from "uuid";
 import { mysql } from "../database/mysql.js";
 
 export default class PostagensController {
@@ -88,9 +89,9 @@ export default class PostagensController {
             if (error) { return res.status(500).send({ error: error }) }
 
             conn.query(
-                `INSERT INTO posts (title, description, created_at, updated_at, type, image)
-                VALUES (?, ?, ?, ?, ?, ?)`,
-                [req.body.titulo, req.body.descricao, req.body.criado, req.body.atualizado, req.body.tipo, req.file.path],
+                `INSERT INTO posts (uuid, title, description, created_at, updated_at, type, image)
+                VALUES (?, ?, ?, ?, ?, ?, ?)`,
+                [uuidv4(), req.body.titulo, req.body.descricao, req.body.criado, req.body.atualizado, req.body.tipo, req.file.path],
                 (error, result, fields) => {
                     conn.release()
 
