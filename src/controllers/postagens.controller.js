@@ -23,6 +23,7 @@ export default class PostagensController {
                                 created_at: post.created_at,
                                 updated_at: post.updated_at,
                                 type: post.type,
+                                image: post.image,
                                 request: {
                                     type: 'GET',
                                     descripition: 'Get a post by id',
@@ -65,6 +66,7 @@ export default class PostagensController {
                             created_at: result[0].created_at,
                             updated_at: result[0].updated_at,
                             type: result[0].type,
+                            image: result[0].image,
                             request: {
                                 type: 'GET',
                                 descripition: 'Get all posts',
@@ -80,13 +82,15 @@ export default class PostagensController {
     }
 
     post(req, res, next) {
+
         mysql.getConnection((error, conn) => {
 
             if (error) { return res.status(500).send({ error: error }) }
 
             conn.query(
-                'INSERT INTO posts (title, description, created_at, updated_at, type) VALUES (?, ?, ?, ?, ?)',
-                [req.body.titulo, req.body.descricao, req.body.criado, req.body.atualizado, req.body.tipo],
+                `INSERT INTO posts (title, description, created_at, updated_at, type, image)
+                VALUES (?, ?, ?, ?, ?, ?)`,
+                [req.body.titulo, req.body.descricao, req.body.criado, req.body.atualizado, req.body.tipo, req.file.path],
                 (error, result, fields) => {
                     conn.release()
 
@@ -101,6 +105,7 @@ export default class PostagensController {
                             created_at: req.body.criado,
                             updated_at: req.body.atualizado,
                             type: req.body.tipo,
+                            image: req.file.path,
                             request: {
                                 type: 'GET',
                                 descripition: 'Get all posts',

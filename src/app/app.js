@@ -6,6 +6,7 @@ import router from '../routes/routes.js';
 export const App = express()
 
 App.use(morgan('dev'))
+App.use('/uploads', express.static('./public/uploads'))
 App.use(bodyParser.urlencoded({ extended: false }))
 App.use(bodyParser.json())
 
