@@ -88,10 +88,13 @@ export default class PostagensController {
 
             if (error) { return res.status(500).send({ error: error }) }
 
+            const id = uuidv4()
+            const created_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
+
             conn.query(
                 `INSERT INTO posts (uuid, title, description, created_at, updated_at, type, image)
                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [uuidv4(), req.body.titulo, req.body.descricao, req.body.criado, req.body.atualizado, req.body.tipo, req.file.path],
+                [id, req.body.titulo, req.body.descricao, created_at, created_at, req.body.tipo, req.file.path],
                 (error, result, fields) => {
                     conn.release()
 
@@ -100,11 +103,10 @@ export default class PostagensController {
                     const response = {
                         message: 'Post inserted successfully!',
                         post: {
-                            id: result.id,
+                            id: id,
                             title: req.body.titulo,
                             descripition: req.body.descricao,
-                            created_at: req.body.criado,
-                            updated_at: req.body.atualizado,
+                            created_at: created_at,
                             type: req.body.tipo,
                             image: req.file.path,
                             request: {
@@ -125,17 +127,20 @@ export default class PostagensController {
         mysql.getConnection((error, conn) => {
             if (error) { return res.status(500).send({ error: error }) }
 
+            const updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
+
             conn.query(
                 `UPDATE posts
                     SET title       = ?,
                         description = ?,
+                        updated_at  = ?,
                         type        = ?
-                WHERE   id          = ?`,
-                [req.body.titulo, req.body.descricao, req.body.tipo, req.params.id],
+                WHERE   uuid          = ?`,
+                [req.body.titulo, req.body.descricao, updated_at, req.body.tipo, req.params.id],
                 (error, result, fields) => {
                     conn.release()
 
-                    if (error) { return res.status(200).send({ error: error }) }
+                    if (error) { return res.status(500).send({ error: error }) }
 
                     const response = {
                         message: 'Post updated successfully!',
@@ -143,7 +148,7 @@ export default class PostagensController {
                             id: result.id,
                             title: req.body.titulo,
                             descripition: req.body.descricao,
-                            updated_at: req.body.atualizado,
+                            updated_at: updated_at,
                             type: req.body.tipo,
                             request: {
                                 type: 'GET',
