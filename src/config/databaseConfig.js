@@ -8,4 +8,4 @@ const pool = createPool({
     "port": process.env.MYSQL_PORT
 })
 
-export const mysql = pool
+export const connectDB = pool

@@ -1,21 +1,46 @@
 import { v4 as uuidv4 } from "uuid";
-import { mysql } from "../database/mysql.js";
+import { connectDB } from "../config/databaseConfig.js";
+import { postSchema } from "../models/PostSchema.js";
 
 export default class PostagensController {
 
     getAll(req, res, next) {
-        mysql.getConnection((error, conn) => {
+
+        connectDB.getConnection((error, conn) => {
             if (error) { return res.status(500).send({ error: error }) }
 
+            const { page, limit = 10 } = req.query;
+            const offset = (page * limit) - limit
+            var lastPage = 1
+
             conn.query(
-                'SELECT * FROM posts',
+                `SELECT * FROM posts
+                ORDER BY created_at
+                ${page ? `LIMIT ${limit} OFFSET ${offset}` : ''}`,
                 (error, result, fields) => {
                     conn.release()
 
                     if (error) { return res.status(500).send({ error: error }) }
 
+
+                    const countPost = result.length
+
+                    if (countPost !== 0) {
+                        lastPage = Math.ceil(countPost / limit)
+                    }
+                    else {
+                        return res.status(400).send({ message: "No posts were found" })
+                    }
+
+                    const pagination = page ? {
+                        Itens: countPost,
+                        Pages: lastPage,
+                        Page: page,
+                        limit: limit
+                    } : { Itens: countPost }
+
                     const response = {
-                        length: result.length,
+                        pagination: pagination,
                         posts: result.map(post => {
                             return {
                                 id: post.id,
@@ -31,7 +56,8 @@ export default class PostagensController {
                                     url: 'http://localhost:3000/postagens/' + post.id
                                 }
                             }
-                        })
+                        }
+                        )
                     }
 
                     return res.status(200).send(response)
@@ -42,7 +68,7 @@ export default class PostagensController {
     }
 
     get(req, res, next) {
-        mysql.getConnection((error, conn) => {
+        connectDB.getConnection((error, conn) => {
             if (error) { return res.status(500).send({ error: error }) }
 
             conn.query(
@@ -84,7 +110,12 @@ export default class PostagensController {
 
     post(req, res, next) {
 
-        mysql.getConnection((error, conn) => {
+        const { error } = postSchema.validate(req.body)
+        if (error) {
+            return res.status(400).send({ message: error.details[0].message })
+        }
+
+        connectDB.getConnection((error, conn) => {
 
             if (error) { return res.status(500).send({ error: error }) }
 
@@ -94,7 +125,7 @@ export default class PostagensController {
             conn.query(
                 `INSERT INTO posts (uuid, title, description, created_at, updated_at, type, image)
                 VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [id, req.body.titulo, req.body.descricao, created_at, created_at, req.body.tipo, req.file.path],
+                [id, req.body.title, req.body.description, created_at, created_at, req.body.type, req.file.path],
                 (error, result, fields) => {
                     conn.release()
 
@@ -104,10 +135,10 @@ export default class PostagensController {
                         message: 'Post inserted successfully!',
                         post: {
                             id: id,
-                            title: req.body.titulo,
-                            descripition: req.body.descricao,
+                            title: req.body.title,
+                            descripition: req.body.descripition,
                             created_at: created_at,
-                            type: req.body.tipo,
+                            type: req.body.type,
                             image: req.file.path,
                             request: {
                                 type: 'GET',
@@ -124,7 +155,7 @@ export default class PostagensController {
     }
 
     patch(req, res, next) {
-        mysql.getConnection((error, conn) => {
+        connectDB.getConnection((error, conn) => {
             if (error) { return res.status(500).send({ error: error }) }
 
             const updated_at = new Date().toISOString().slice(0, 19).replace('T', ' ')
@@ -136,7 +167,7 @@ export default class PostagensController {
                         updated_at  = ?,
                         type        = ?
                 WHERE   uuid          = ?`,
-                [req.body.titulo, req.body.descricao, updated_at, req.body.tipo, req.params.id],
+                [req.body.title, req.body.descripition, updated_at, req.body.type, req.params.id],
                 (error, result, fields) => {
                     conn.release()
 
@@ -146,10 +177,10 @@ export default class PostagensController {
                         message: 'Post updated successfully!',
                         post: {
                             id: result.id,
-                            title: req.body.titulo,
-                            descripition: req.body.descricao,
+                            title: req.body.title,
+                            descripition: req.body.descripition,
                             updated_at: updated_at,
-                            type: req.body.tipo,
+                            type: req.body.type,
                             request: {
                                 type: 'GET',
                                 descripition: 'Get a post by id',
@@ -165,7 +196,7 @@ export default class PostagensController {
     }
 
     delete(req, res, next) {
-        mysql.getConnection((error, conn) => {
+        connectDB.getConnection((error, conn) => {
             if (error) { return res.status(500).send({ error: error }) }
 
             conn.query(
