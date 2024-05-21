@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import morgan from "morgan";
 import postRoutes from "../routes/postRoutes.js";
+import userRoutes from "../routes/userRoutes.js";
 
 export const App = express()
 
@@ -27,8 +28,8 @@ App.use((req, res, next) => {
 
 // App.use(express.json())
 App.use('/postagens', postRoutes)
+App.use('/users', userRoutes)
 
-// Rota não encontrada
 App.use((req, res, next) => {
     const erro = new Error("Not Found")
     erro.status = 404

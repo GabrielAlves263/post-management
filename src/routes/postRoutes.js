@@ -1,6 +1,6 @@
 import Router from "express";
 import { upload } from "../config/multerConfig.js";
-import PostController from "../controllers/postController.js";
+import PostController from "../controllers/PostController.js";
 
 const router = Router()
 

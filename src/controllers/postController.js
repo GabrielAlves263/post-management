@@ -25,7 +25,7 @@ export default class PostController {
                     totalItens: count,
                     totalPages,
                     currentPage: page,
-                    pageSize: limit
+                    pageSize: posts.length
                 }
 
                 const response = {
