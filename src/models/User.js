@@ -37,4 +37,22 @@ export default class User {
             )
         })
     }
+
+    static login(email, password, callback) {
+        connectDB.getConnection((error, conn) => {
+            if (error) return callback(error, null)
+
+            conn.query(
+                'SELECT * FROM users WHERE email=?',
+                email,
+                (error, result) => {
+                    conn.release()
+
+                    if (error) return callback(error, null)
+
+                    return callback(null, result)
+                }
+            )
+        })
+    }
 }
