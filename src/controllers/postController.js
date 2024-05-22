@@ -96,6 +96,7 @@ export default class PostController {
         const imagePath = req.file ? req.file.path : null
         const id = uuidv4()
         const created_at = new Date()
+        const created_by = req.user.email
 
         const newPost = {
             id,
@@ -104,7 +105,9 @@ export default class PostController {
             created_at: created_at,
             updated_at: created_at,
             type,
-            imagePath
+            imagePath,
+            created_by: created_by,
+            updated_by: created_by
         }
 
         Post.create(newPost, (error, result) => {

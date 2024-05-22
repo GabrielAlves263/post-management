@@ -65,9 +65,9 @@ export default class Post {
             if (error) { return callback(error, null) }
 
             conn.query(
-                `INSERT INTO posts (uuid, title, description, created_at, updated_at, type, image)
-                    VALUES (?, ?, ?, ?, ?, ?, ?)`,
-                [data.id, data.title, data.description, data.created_at, data.created_at, data.type, data.imagePath],
+                `INSERT INTO posts (uuid, title, description, created_at, updated_at, type, image, created_by, updated_by)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+                [data.id, data.title, data.description, data.created_at, data.created_at, data.type, data.imagePath, data.created_by, data.updated_by],
                 (error, result) => {
                     conn.release()
 
