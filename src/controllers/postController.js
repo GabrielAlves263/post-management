@@ -58,9 +58,9 @@ export default class PostController {
         Post.getById({ id }, (error, result) => {
             if (error) { return res.status(500).send({ error: error }) }
 
-            if (result.length == 0) {
+            if (!result) {
                 return res.status(404).send({
-                    message: `No post with id ${req.params.id} was found`
+                    message: `No post was found`
                 })
             }
 
@@ -142,7 +142,8 @@ export default class PostController {
         const updatePost = {
             ...req.body,
             image: req.file ? req.file.path : null,
-            updated_at: new Date()
+            updated_at: new Date(),
+            updated_by: req.user.email
         }
 
         Post.update(id, updatePost, (error, result) => {

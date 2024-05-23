@@ -9,7 +9,7 @@ const router = Router()
 router.get('/', PostController.getAll)
 router.get('/:id', PostController.get)
 router.post('/', login, upload.single('post_image'), PostController.create)
-router.patch('/:id', upload.single('post_image'), PostController.update)
-router.delete('/:id', PostController.delete)
+router.patch('/:id', login, upload.single('post_image'), PostController.update)
+router.delete('/:id', login, PostController.delete)
 
 export default router   
