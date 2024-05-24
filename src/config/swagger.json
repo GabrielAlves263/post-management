@@ -1,0 +1,81 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Post Management",
+        "description": "The Post Management API allows users to create, retrieve, update, and delete posts in an application",
+        "contact": {
+            "email": "jgabrielalves@alu.ufc.br"
+        },
+        "version": "1.0.0"
+    },
+    "paths": {
+        "/posts": {
+            "post": {
+                "summary": "Create a new post",
+                "description": "This endpoint allows users to create a new post by providing the necessary details such as the title, description, type, and optional tags. Upon successful creation, the API returns the details of the newly created post along with a unique identifier.",
+                "tags": [
+                    "Posts"
+                ],
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/Post"
+                            },
+                            "examples": {
+                                "Post": {
+                                    "value": {
+                                        "title": "New post title",
+                                        "description": "New post description",
+                                        "type": "[edital, noticia, divulgacao]"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "401": {
+                        "description": "Unauthorized"
+                    },
+                    "400": {
+                        "description": "The request could not be processed due to invalid input data. The response includes error details."
+                    },
+                    "500": {
+                        "description": "Internal server error"
+                    },
+                    "201": {
+                        "description": "The post was successfully created",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "object",
+                                    "$ref": "#/components/schemas/Post"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "Post": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "type": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}

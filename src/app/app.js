@@ -1,6 +1,8 @@
 import bodyParser from "body-parser";
 import express from "express";
 import morgan from "morgan";
+import swagger from "swagger-ui-express";
+import swaggerDocs from "../config/swagger2.json" assert { type: 'json' };
 import postRoutes from "../routes/postRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
 
@@ -27,8 +29,9 @@ App.use((req, res, next) => {
 })
 
 // App.use(express.json())
-App.use('/postagens', postRoutes)
+App.use('/posts', postRoutes)
 App.use('/users', userRoutes)
+App.use('/docs', swagger.serve, swagger.setup(swaggerDocs))
 
 App.use((req, res, next) => {
     const erro = new Error("Not Found")

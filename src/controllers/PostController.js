@@ -40,7 +40,7 @@ export default class PostController {
                         request: {
                             type: 'GET',
                             description: 'Get a post by id',
-                            url: `http://localhost:3000/postagens/${post.id}`
+                            url: `http://localhost:3000/posts/${post.id}`
                         }
                     })),
                     pagination,
@@ -76,7 +76,7 @@ export default class PostController {
                     request: {
                         type: 'GET',
                         descripition: 'Get all posts',
-                        url: 'http://localhost:3000/postagens'
+                        url: 'http://localhost:3000/posts'
                     }
                 }
             }
@@ -125,7 +125,7 @@ export default class PostController {
                     request: {
                         type: 'GET',
                         descripition: 'Get all posts',
-                        url: 'http://localhost:3000/postagens'
+                        url: 'http://localhost:3000/posts'
                     }
                 }
             }
@@ -161,7 +161,7 @@ export default class PostController {
                     request: {
                         type: 'GET',
                         descripition: 'Get a post by id',
-                        url: 'http://localhost:3000/postagens/' + id
+                        url: 'http://localhost:3000/posts/' + id
                     }
                 }
             }
@@ -188,7 +188,7 @@ export default class PostController {
                 request: {
                     type: 'POST',
                     descripition: 'Insert new post',
-                    url: 'http://localhost:3000/postagens',
+                    url: 'http://localhost:3000/posts',
                     body: {
                         title: "String",
                         descripition: "String",
