@@ -2,7 +2,7 @@ import bodyParser from "body-parser";
 import express from "express";
 import morgan from "morgan";
 import swagger from "swagger-ui-express";
-import swaggerDocs from "../config/swagger2.json" assert { type: 'json' };
+import swaggerDocs from "../config/swagger.json" assert { type: 'json' };
 import postRoutes from "../routes/postRoutes.js";
 import userRoutes from "../routes/userRoutes.js";
 
