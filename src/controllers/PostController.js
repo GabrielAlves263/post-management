@@ -73,6 +73,8 @@ export default class PostController {
                     updated_at: result.updated_at,
                     type: result.type,
                     image: result.image,
+                    created_by: result.created_by,
+                    updated_by: result.updated_by,
                     request: {
                         type: 'GET',
                         descripition: 'Get all posts',
